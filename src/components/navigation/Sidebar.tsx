@@ -11,17 +11,17 @@ const navigationConfig = {
     path: '/dashboard',
     icon: Activity
   }, {
-    name: 'Patients',
-    path: '/patients',
+    name: 'Profile',
+    path: '/doctor-profile',
+    icon: UserCheck
+  }, {
+    name: 'Patient Search',
+    path: '/patient-search',
     icon: Users
   }, {
     name: 'Appointments',
     path: '/appointments',
     icon: Calendar
-  }, {
-    name: 'Records',
-    path: '/records',
-    icon: FileText
   }, {
     name: 'Prescriptions',
     path: '/prescriptions',
@@ -53,12 +53,12 @@ const navigationConfig = {
     path: '/dashboard',
     icon: BarChart3
   }, {
-    name: 'Users',
-    path: '/users',
+    name: 'HRM',
+    path: '/hrm',
     icon: Users
   }, {
-    name: 'System Logs',
-    path: '/logs',
+    name: 'Patient Search',
+    path: '/patient-search',
     icon: FileText
   }, {
     name: 'Analytics',
@@ -68,6 +68,49 @@ const navigationConfig = {
     name: 'Settings',
     path: '/settings',
     icon: Settings
+  }],
+  hr: [{
+    name: 'Dashboard',
+    path: '/dashboard',
+    icon: BarChart3
+  }, {
+    name: 'HRM',
+    path: '/hrm',
+    icon: Users
+  }, {
+    name: 'Staff Reports',
+    path: '/reports',
+    icon: FileText
+  }],
+  nurse: [{
+    name: 'Dashboard',
+    path: '/dashboard',
+    icon: Activity
+  }, {
+    name: 'Patient Search',
+    path: '/patient-search',
+    icon: Users
+  }, {
+    name: 'Appointments',
+    path: '/appointments',
+    icon: Calendar
+  }],
+  receptionist: [{
+    name: 'Dashboard',
+    path: '/dashboard',
+    icon: Activity
+  }, {
+    name: 'Patient Search',
+    path: '/patient-search',
+    icon: Users
+  }, {
+    name: 'Appointments',
+    path: '/appointments',
+    icon: Calendar
+  }, {
+    name: 'Check-in',
+    path: '/checkin',
+    icon: UserCheck
   }]
 };
 

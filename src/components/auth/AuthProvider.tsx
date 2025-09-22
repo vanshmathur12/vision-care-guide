@@ -1,14 +1,16 @@
 import React, { createContext, useContext, useState } from 'react';
 
-export type UserRole = 'doctor' | 'patient' | 'admin';
+export type UserRole = 'doctor' | 'patient' | 'admin' | 'hr' | 'nurse' | 'receptionist';
 
 export interface User {
   id: string;
   name: string;
   email: string;
-  phone?: string;        // ✅ Added optional phone number
+  phone?: string;
   role: UserRole;
   avatar?: string;
+  permissions?: string[];
+  department?: string;
 }
 
 interface AuthContextType {
@@ -26,19 +28,48 @@ const mockUsers: Record<UserRole, User> = {
     id: '1',
     name: 'Dr. Sarah Johnson',
     email: 'dr.johnson@hospital.com',
-    role: 'doctor'
+    role: 'doctor',
+    permissions: ['patient_read', 'patient_write', 'prescription_write'],
+    department: 'Cardiology'
   },
   patient: {
     id: '2',
     name: 'John Smith',
     email: 'john.smith@email.com',
-    role: 'patient'
+    role: 'patient',
+    permissions: ['own_records_read'],
   },
   admin: {
     id: '3',
     name: 'Admin User',
     email: 'admin@hospital.com',
-    role: 'admin'
+    role: 'admin',
+    permissions: ['all'],
+    department: 'Administration'
+  },
+  hr: {
+    id: '4',
+    name: 'HR Manager',
+    email: 'hr@hospital.com',
+    role: 'hr',
+    permissions: ['staff_read', 'staff_write', 'role_manage'],
+    department: 'Human Resources'
+  },
+  nurse: {
+    id: '5',
+    name: 'Nurse Betty Wilson',
+    email: 'nurse.wilson@hospital.com',
+    role: 'nurse',
+    permissions: ['patient_read', 'appointment_manage'],
+    department: 'General Medicine'
+  },
+  receptionist: {
+    id: '6',
+    name: 'Reception Desk',
+    email: 'reception@hospital.com',
+    role: 'receptionist',
+    permissions: ['patient_read', 'appointment_manage', 'patient_search'],
+    department: 'Front Desk'
   }
 };
 
