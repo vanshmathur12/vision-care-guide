@@ -3,7 +3,9 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Heart, Users, Calendar, FileText, Settings, LogOut, Stethoscope, UserCheck, Shield, Activity, Upload, MessageSquare, BarChart3 } from 'lucide-react';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Heart, Users, Calendar, FileText, Settings, LogOut, Stethoscope, UserCheck, Shield, Activity, Upload, MessageSquare, BarChart3, Menu } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const navigationConfig = {
   doctor: [{
@@ -114,15 +116,9 @@ const navigationConfig = {
   }]
 };
 
-export function Sidebar() {
-  const { user, logout } = useAuth();
-  
-  if (!user) return null;
-  
-  const navigation = navigationConfig[user.role] || [];
-
+function SidebarContent({ user, navigation, logout }: { user: any; navigation: any[]; logout: () => void }) {
   return (
-    <div className="w-64 bg-card border-r border-border h-screen flex flex-col">
+    <>
       {/* Header */}
       <div className="p-6 border-b border-border">
         <div className="flex items-center space-x-3">
@@ -136,7 +132,7 @@ export function Sidebar() {
         <div className="flex items-center space-x-3">
           <Avatar>
             <AvatarFallback>
-              {user.name.split(' ').map(n => n[0]).join('')}
+              {user.name.split(' ').map((n: string) => n[0]).join('')}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
@@ -147,7 +143,7 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-2">
+      <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
         {navigation.map(item => (
           <NavLink 
             key={item.path} 
@@ -177,6 +173,38 @@ export function Sidebar() {
           Logout
         </Button>
       </div>
+    </>
+  );
+}
+
+export function Sidebar() {
+  const { user, logout } = useAuth();
+  const isMobile = useIsMobile();
+  
+  if (!user) return null;
+  
+  const navigation = navigationConfig[user.role] || [];
+
+  if (isMobile) {
+    return (
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="ghost" size="icon" className="fixed top-4 left-4 z-50 md:hidden">
+            <Menu className="h-6 w-6" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="w-64 p-0">
+          <div className="flex flex-col h-full bg-card">
+            <SidebarContent user={user} navigation={navigation} logout={logout} />
+          </div>
+        </SheetContent>
+      </Sheet>
+    );
+  }
+
+  return (
+    <div className="w-64 bg-card border-r border-border h-screen flex flex-col">
+      <SidebarContent user={user} navigation={navigation} logout={logout} />
     </div>
   );
 }

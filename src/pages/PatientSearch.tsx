@@ -25,22 +25,22 @@ export default function PatientSearchPage() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="container mx-auto p-4 md:p-6 space-y-4 md:space-y-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Patient Search</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl md:text-3xl font-bold">Patient Search</h1>
+          <p className="text-sm md:text-base text-muted-foreground">
             Search for patients by name, phone number, or UHID
           </p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline">
-            <Filter className="h-4 w-4 mr-2" />
-            Advanced Filter
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" className="md:size-default">
+            <Filter className="h-4 w-4 md:mr-2" />
+            <span className="hidden md:inline">Advanced Filter</span>
           </Button>
-          <Button>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Patient
+          <Button size="sm" className="md:size-default">
+            <Plus className="h-4 w-4 md:mr-2" />
+            <span className="hidden md:inline">Add Patient</span>
           </Button>
         </div>
       </div>
@@ -74,21 +74,21 @@ export default function PatientSearchPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
+          <CardTitle className="text-lg md:text-xl">Quick Actions</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
-            <Button variant="outline" className="h-20 flex-col">
-              <Search className="h-6 w-6 mb-2" />
-              <span className="text-sm">Advanced Search</span>
+          <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
+            <Button variant="outline" className="h-16 md:h-20 flex-col">
+              <Search className="h-5 w-5 md:h-6 md:w-6 mb-1 md:mb-2" />
+              <span className="text-xs md:text-sm">Advanced Search</span>
             </Button>
-            <Button variant="outline" className="h-20 flex-col">
-              <Plus className="h-6 w-6 mb-2" />
-              <span className="text-sm">Register New Patient</span>
+            <Button variant="outline" className="h-16 md:h-20 flex-col">
+              <Plus className="h-5 w-5 md:h-6 md:w-6 mb-1 md:mb-2" />
+              <span className="text-xs md:text-sm">Register New Patient</span>
             </Button>
-            <Button variant="outline" className="h-20 flex-col">
-              <Filter className="h-6 w-6 mb-2" />
-              <span className="text-sm">Bulk Operations</span>
+            <Button variant="outline" className="h-16 md:h-20 flex-col">
+              <Filter className="h-5 w-5 md:h-6 md:w-6 mb-1 md:mb-2" />
+              <span className="text-xs md:text-sm">Bulk Operations</span>
             </Button>
           </div>
         </CardContent>
