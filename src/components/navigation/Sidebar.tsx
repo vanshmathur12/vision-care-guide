@@ -55,10 +55,6 @@ const navigationConfig = {
     path: '/dashboard',
     icon: BarChart3
   }, {
-    name: 'HRM',
-    path: '/hrm',
-    icon: Users
-  }, {
     name: 'Patient Search',
     path: '/patient-search',
     icon: FileText

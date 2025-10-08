@@ -1,19 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import {
   Calendar,
   FileText,
   Upload,
-  Activity,
-  Heart,
   Brain,
-  AlertCircle,
-  Clock,
   Plus,
-  Download
+  QrCode
 } from 'lucide-react';
 
 const upcomingAppointments = [
@@ -21,23 +16,15 @@ const upcomingAppointments = [
   { id: 2, doctor: 'Dr. Mike Brown', date: '2024-01-25', time: '02:30 PM', type: 'Consultation' },
 ];
 
-const recentDocuments = [
-  { id: 1, name: 'Blood Test Results', date: '2024-01-15', type: 'Lab Report' },
-  { id: 2, name: 'X-Ray Chest', date: '2024-01-10', type: 'Imaging' },
-  { id: 3, name: 'Prescription', date: '2024-01-08', type: 'Medication' },
-];
-
-const healthMetrics = [
-  { name: 'Blood Pressure', value: '120/80', status: 'normal', progress: 85 },
-  { name: 'Heart Rate', value: '72 bpm', status: 'normal', progress: 90 },
-  { name: 'Blood Sugar', value: '95 mg/dL', status: 'normal', progress: 80 },
-  { name: 'Weight', value: '70 kg', status: 'stable', progress: 75 },
-];
-
 export function PatientDashboard() {
+  const navigate = useNavigate();
+
   const handleRiskAssessment = () => {
-    // In real app, this would send data to AI API
     alert('Risk assessment feature would connect to AI API for health predictions');
+  };
+
+  const showQRCode = (appointmentId: number) => {
+    alert(`QR Code for appointment ${appointmentId} would be displayed here`);
   };
 
   return (
@@ -50,7 +37,7 @@ export function PatientDashboard() {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="cursor-pointer hover:shadow-md transition-shadow">
+        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate('/book-appointment')}>
           <CardContent className="p-6 text-center">
             <Calendar className="h-8 w-8 text-primary mx-auto mb-2" />
             <h3 className="font-medium">Book Appointment</h3>
@@ -58,7 +45,7 @@ export function PatientDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:shadow-md transition-shadow">
+        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate('/upload-documents')}>
           <CardContent className="p-6 text-center">
             <Upload className="h-8 w-8 text-primary mx-auto mb-2" />
             <h3 className="font-medium">Upload Documents</h3>
@@ -66,7 +53,7 @@ export function PatientDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:shadow-md transition-shadow">
+        <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate('/view-records')}>
           <CardContent className="p-6 text-center">
             <FileText className="h-8 w-8 text-primary mx-auto mb-2" />
             <h3 className="font-medium">View Records</h3>
@@ -83,33 +70,8 @@ export function PatientDashboard() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Health Metrics */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Health Metrics</CardTitle>
-            <CardDescription>Your latest vitals and measurements</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {healthMetrics.map((metric) => (
-              <div key={metric.name} className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium">{metric.name}</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm font-bold">{metric.value}</span>
-                    <Badge variant={metric.status === 'normal' ? 'default' : 'secondary'}>
-                      {metric.status}
-                    </Badge>
-                  </div>
-                </div>
-                <Progress value={metric.progress} className="h-2" />
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-
-        {/* Upcoming Appointments */}
-        <Card>
+      {/* Upcoming Appointments */}
+      <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -125,63 +87,32 @@ export function PatientDashboard() {
           <CardContent>
             <div className="space-y-4">
               {upcomingAppointments.map((appointment) => (
-                <div key={appointment.id} className="flex items-center justify-between p-4 border rounded-lg">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                      <Calendar className="h-6 w-6 text-primary" />
+                <div key={appointment.id} className="flex items-center justify-between p-3 sm:p-4 border rounded-lg">
+                  <div className="flex items-center space-x-3 flex-1 min-w-0">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Calendar className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                     </div>
-                    <div>
-                      <p className="font-medium">{appointment.doctor}</p>
+                    <div className="min-w-0">
+                      <p className="font-medium truncate">{appointment.doctor}</p>
                       <p className="text-sm text-muted-foreground">{appointment.type}</p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-xs sm:text-sm text-muted-foreground">
                         {appointment.date} at {appointment.time}
                       </p>
                     </div>
                   </div>
-                  <Badge variant="outline">Confirmed</Badge>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="flex-shrink-0 ml-2"
+                    onClick={() => showQRCode(appointment.id)}
+                  >
+                    <QrCode className="h-4 w-4" />
+                  </Button>
                 </div>
               ))}
             </div>
           </CardContent>
         </Card>
-      </div>
-
-      {/* Recent Documents */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Recent Medical Documents</CardTitle>
-              <CardDescription>Your latest test results and prescriptions</CardDescription>
-            </div>
-            <Button size="sm" variant="outline">
-              <Upload className="h-4 w-4 mr-2" />
-              Upload New
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {recentDocuments.map((doc) => (
-              <div key={doc.id} className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
-                    <FileText className="h-6 w-6 text-muted-foreground" />
-                  </div>
-                  <div>
-                    <p className="font-medium">{doc.name}</p>
-                    <p className="text-sm text-muted-foreground">{doc.type}</p>
-                    <p className="text-sm text-muted-foreground">Uploaded: {doc.date}</p>
-                  </div>
-                </div>
-                <Button size="sm" variant="ghost">
-                  <Download className="h-4 w-4" />
-                </Button>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

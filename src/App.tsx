@@ -5,11 +5,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { DoctorDashboard } from "@/components/dashboard/DoctorDashboard";
-import { PatientDashboard } from "@/components/dashboard/PatientDashboard";
-import { AdminDashboard } from "@/components/dashboard/AdminDashboard";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import BookAppointment from "./pages/BookAppointment";
+import UploadDocuments from "./pages/UploadDocuments";
+import ViewRecords from "./pages/ViewRecords";
 
 const queryClient = new QueryClient();
 
@@ -24,15 +24,14 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/dashboard" element={<Index />} />
-              <Route path="/patients" element={<DoctorDashboard />} />
+              <Route path="/book-appointment" element={<BookAppointment />} />
+              <Route path="/upload-documents" element={<UploadDocuments />} />
+              <Route path="/view-records" element={<ViewRecords />} />
               <Route path="/appointments" element={<Index />} />
-              <Route path="/records" element={<Index />} />
-              <Route path="/prescriptions" element={<Index />} />
               <Route path="/my-records" element={<Index />} />
               <Route path="/documents" element={<Index />} />
               <Route path="/risk-assessment" element={<Index />} />
-              <Route path="/users" element={<Index />} />
-              <Route path="/logs" element={<Index />} />
+              <Route path="/patient-search" element={<Index />} />
               <Route path="/analytics" element={<Index />} />
               <Route path="/settings" element={<Index />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

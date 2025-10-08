@@ -2,264 +2,136 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Card, CardContent, CardDescription, CardHeader, CardTitle,
-} from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Heart, Stethoscope, Shield, User } from 'lucide-react';
 import { useAuth } from './AuthProvider';
-import axios from 'axios';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-
-  // phone OTP states
-  const [phoneMode, setPhoneMode] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
-  const [phoneOtp, setPhoneOtp] = useState('');
-  const [otpLoading, setOtpLoading] = useState(false);
-  const [otpVerified, setOtpVerified] = useState(false);
-
+  const [selectedRole, setSelectedRole] = useState<'doctor' | 'patient' | 'admin' | null>(null);
   const { login, switchRole } = useAuth();
 
-  const handleEmailLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    await login(email, password);
-  };
-
-  const handlePhoneLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!otpVerified) {
-      alert('Please verify the OTP sent to your phone.');
-      return;
+    if (selectedRole) {
+      // For demo purposes, use the quick login
+      switchRole(selectedRole);
+    } else {
+      await login(email, password);
     }
-    await login('', '', phone); // adjust if your login function needs different args
   };
 
-  const sendPhoneOtp = async () => {
-    setOtpLoading(true);
-    try {
-      await axios.post('/api/send-otp', { phone });
-      setOtpSent(true);
-    } catch {
-      alert('Failed to send OTP. Try again.');
-    }
-    setOtpLoading(false);
-  };
-
-  const verifyPhoneOtp = async () => {
-    setOtpLoading(true);
-    try {
-      const res = await axios.post('/api/verify-otp', { phone, otp: phoneOtp });
-      if (res.data.success) setOtpVerified(true);
-      else alert('Invalid OTP');
-    } catch {
-      alert('Verification failed.');
-    }
-    setOtpLoading(false);
-  };
-
-  const quickLogin = (role: 'doctor' | 'patient' | 'admin') => {
-    switchRole(role);
-  };
+  const roleOptions = [
+    { role: 'doctor' as const, icon: Stethoscope, title: 'Doctor Portal', description: 'Access patient records and manage appointments', color: 'from-blue-500 to-cyan-500' },
+    { role: 'patient' as const, icon: User, title: 'Patient Portal', description: 'View your health records and book appointments', color: 'from-green-500 to-emerald-500' },
+    { role: 'admin' as const, icon: Shield, title: 'Admin Portal', description: 'Manage system and user accounts', color: 'from-purple-500 to-pink-500' },
+  ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-light to-primary/20 p-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-primary/10 p-4">
+      <div className="w-full max-w-5xl">
+        {/* Header */}
+        <div className="text-center mb-8 sm:mb-12">
           <div className="flex items-center justify-center mb-4">
-            <Heart className="h-12 w-12 text-primary mr-2" />
-            <h1 className="text-3xl font-bold text-primary">ValueKare EMR</h1>
+            <Heart className="h-10 w-10 sm:h-12 sm:w-12 text-primary mr-2" />
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary">ValueKare EMR</h1>
           </div>
-          <p className="text-muted-foreground">
+          <p className="text-sm sm:text-base text-muted-foreground">
             Electronic Medical Records & Patient Navigation
           </p>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Login to Your Account</CardTitle>
-            <CardDescription>Choose your preferred login method</CardDescription>
-          </CardHeader>
-
-          <CardContent>
-            <Tabs defaultValue="demo" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="login">Login</TabsTrigger>
-                <TabsTrigger value="aadhaar">Family Head</TabsTrigger>
-                <TabsTrigger value="demo">Quick Demo</TabsTrigger>
-              </TabsList>
-
-              {/* Login Tab */}
-              <TabsContent value="login">
-                {!phoneMode ? (
-                  <form onSubmit={handleEmailLogin} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="Enter your email"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        required
-                      />
+        {!selectedRole ? (
+          <div>
+            <h2 className="text-xl sm:text-2xl font-semibold text-center mb-6 sm:mb-8">Select Your Portal</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+              {roleOptions.map(({ role, icon: Icon, title, description, color }) => (
+                <Card 
+                  key={role}
+                  className="cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 border-2 hover:border-primary"
+                  onClick={() => setSelectedRole(role)}
+                >
+                  <CardContent className="p-6 sm:p-8 text-center">
+                    <div className={`w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 rounded-full bg-gradient-to-br ${color} flex items-center justify-center shadow-lg`}>
+                      <Icon className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
                     </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Password</Label>
-                      <Input
-                        id="password"
-                        type="password"
-                        placeholder="Enter your password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        required
-                      />
-                      <div className="flex justify-between text-sm">
-                        <a
-                          href="/forgot-password"
-                          className="text-primary hover:underline"
-                        >
-                          Forgot Password?
-                        </a>
-                        <button
-                          type="button"
-                          className="text-primary hover:underline"
-                          onClick={() => setPhoneMode(true)}
-                        >
-                          Login with Phone OTP
-                        </button>
-                      </div>
-                    </div>
-
-                    <Button type="submit" className="w-full">
-                      Login
+                    <h3 className="text-lg sm:text-xl font-bold mb-2">{title}</h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground">{description}</p>
+                    <Button className="w-full mt-4" variant="outline">
+                      Continue as {role.charAt(0).toUpperCase() + role.slice(1)}
                     </Button>
-                  </form>
-                ) : (
-                  <form onSubmit={handlePhoneLogin} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone Number</Label>
-                      <div className="flex gap-2">
-                        <Input
-                          id="phone"
-                          type="tel"
-                          placeholder="Enter your phone number"
-                          value={phone}
-                          onChange={e => setPhone(e.target.value)}
-                          required
-                        />
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={sendPhoneOtp}
-                          disabled={otpLoading || phone.length < 10}
-                        >
-                          {otpLoading ? 'Sending…' : otpSent ? 'Resend' : 'Send OTP'}
-                        </Button>
-                      </div>
-                    </div>
-
-                    {otpSent && (
-                      <div className="space-y-2">
-                        <Label htmlFor="phone-otp">Enter OTP</Label>
-                        <div className="flex gap-2">
-                          <Input
-                            id="phone-otp"
-                            type="text"
-                            placeholder="6-digit OTP"
-                            value={phoneOtp}
-                            onChange={e => setPhoneOtp(e.target.value)}
-                            required
-                          />
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={verifyPhoneOtp}
-                            disabled={otpLoading}
-                          >
-                            {otpLoading ? 'Verifying…' : 'Verify'}
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="flex justify-end text-sm">
-                      <button
-                        type="button"
-                        className="text-primary hover:underline"
-                        onClick={() => setPhoneMode(false)}
-                      >
-                        Back to Email Login
-                      </button>
-                    </div>
-
-                    <Button type="submit" className="w-full" disabled={!otpVerified}>
-                      Login
-                    </Button>
-                  </form>
-                )}
-              </TabsContent>
-
-              {/* Aadhaar Tab */}
-              <TabsContent value="aadhaar" className="space-y-4">
-                <div className="text-center py-8">
-                  <Shield className="h-16 w-16 text-accent mx-auto mb-4" />
-                  <h3 className="text-lg font-medium mb-2">Family Head Login</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Use Aadhaar authentication for family medical records access
-                  </p>
-                  <Button variant="outline" className="w-full">
-                    Authenticate with Aadhaar
-                  </Button>
-                </div>
-              </TabsContent>
-
-              {/* Demo Tab */}
-              <TabsContent value="demo" className="space-y-4">
-                <div className="text-center mb-4">
-                  <User className="h-16 w-16 text-primary mx-auto mb-4" />
-                  <h3 className="text-lg font-medium mb-2">Quick Demo Access</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Try the system with different user roles
-                  </p>
-                </div>
-                
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <Card className="max-w-md mx-auto shadow-2xl">
+            <CardHeader className="space-y-1">
+              <div className="flex items-center justify-center mb-4">
+                {selectedRole === 'doctor' && <Stethoscope className="h-10 w-10 sm:h-12 sm:w-12 text-primary" />}
+                {selectedRole === 'patient' && <User className="h-10 w-10 sm:h-12 sm:w-12 text-primary" />}
+                {selectedRole === 'admin' && <Shield className="h-10 w-10 sm:h-12 sm:w-12 text-primary" />}
+              </div>
+              <CardTitle className="text-xl sm:text-2xl text-center">
+                {selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)} Login
+              </CardTitle>
+              <CardDescription className="text-center">
+                Enter your credentials to access your portal
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Button 
-                    onClick={() => quickLogin('doctor')} 
-                    variant="outline" 
-                    className="w-full justify-start"
-                  >
-                    <Stethoscope className="mr-2 h-4 w-4" />
-                    Login as Doctor
-                  </Button>
-                  
-                  <Button 
-                    onClick={() => quickLogin('patient')} 
-                    variant="outline" 
-                    className="w-full justify-start"
-                  >
-                    <User className="mr-2 h-4 w-4" />
-                    Login as Patient
-                  </Button>
-                  
-                  <Button 
-                    onClick={() => quickLogin('admin')} 
-                    variant="outline" 
-                    className="w-full justify-start"
-                  >
-                    <Shield className="mr-2 h-4 w-4" />
-                    Login as Admin
-                  </Button>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    required
+                  />
                 </div>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
+
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="flex justify-end">
+                  <a
+                    href="/forgot-password"
+                    className="text-sm text-primary hover:underline"
+                  >
+                    Forgot Password?
+                  </a>
+                </div>
+
+                <Button type="submit" className="w-full">
+                  Login
+                </Button>
+                
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  className="w-full"
+                  onClick={() => setSelectedRole(null)}
+                >
+                  Back to Portal Selection
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

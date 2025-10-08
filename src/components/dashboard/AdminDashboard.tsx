@@ -1,61 +1,24 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import {
   Users,
-  Activity,
-  AlertTriangle,
-  Server,
   UserPlus,
-  Settings,
-  BarChart3,
-  Shield,
-  Database,
-  Clock
+  Shield
 } from 'lucide-react';
 
 const systemStats = [
   { name: 'Total Users', value: 1247, change: '+12%', icon: Users },
-  { name: 'Active Sessions', value: 89, change: '+5%', icon: Activity },
-  { name: 'System Uptime', value: '99.9%', change: 'Stable', icon: Server },
-  { name: 'Security Alerts', value: 3, change: '-2', icon: AlertTriangle },
 ];
 
 const recentUsers = [
-  { id: 1, name: 'Dr. John Wilson', role: 'doctor', status: 'active', joinDate: '2024-01-15' },
-  { id: 2, name: 'Mary Johnson', role: 'patient', status: 'active', joinDate: '2024-01-14' },
-  { id: 3, name: 'Dr. Lisa Chen', role: 'doctor', status: 'pending', joinDate: '2024-01-13' },
-  { id: 4, name: 'Tom Anderson', role: 'patient', status: 'inactive', joinDate: '2024-01-12' },
-];
-
-const systemLogs = [
-  { id: 1, action: 'User Login', user: 'Dr. Sarah Johnson', timestamp: '2024-01-16 09:15:32', level: 'info' },
-  { id: 2, action: 'Failed Login Attempt', user: 'unknown@email.com', timestamp: '2024-01-16 09:12:45', level: 'warning' },
-  { id: 3, action: 'Database Backup', user: 'System', timestamp: '2024-01-16 03:00:00', level: 'info' },
-  { id: 4, action: 'Permission Change', user: 'Admin User', timestamp: '2024-01-16 08:30:15', level: 'info' },
+  { id: 1, name: 'Dr. John Wilson', role: 'doctor', joinDate: '2024-01-15' },
+  { id: 2, name: 'Mary Johnson', role: 'patient', joinDate: '2024-01-14' },
+  { id: 3, name: 'Dr. Lisa Chen', role: 'doctor', joinDate: '2024-01-13' },
+  { id: 4, name: 'Tom Anderson', role: 'patient', joinDate: '2024-01-12' },
 ];
 
 export function AdminDashboard() {
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return 'default';
-      case 'pending': return 'warning';
-      case 'inactive': return 'secondary';
-      default: return 'secondary';
-    }
-  };
-
-  const getLogLevelColor = (level: string) => {
-    switch (level) {
-      case 'warning': return 'warning';
-      case 'error': return 'destructive';
-      case 'info': return 'default';
-      default: return 'secondary';
-    }
-  };
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -65,7 +28,7 @@ export function AdminDashboard() {
       </div>
 
       {/* System Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         {systemStats.map((stat) => (
           <Card key={stat.name}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -80,9 +43,8 @@ export function AdminDashboard() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Users */}
-        <Card>
+      {/* Recent Users */}
+      <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -113,45 +75,11 @@ export function AdminDashboard() {
                       <p className="text-xs text-muted-foreground">Joined: {user.joinDate}</p>
                     </div>
                   </div>
-                  <Badge variant={getStatusColor(user.status) as any}>
-                    {user.status}
-                  </Badge>
                 </div>
               ))}
             </div>
           </CardContent>
         </Card>
-
-        {/* System Logs */}
-        <Card>
-          <CardHeader>
-            <CardTitle>System Logs</CardTitle>
-            <CardDescription>Recent system activities and events</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {systemLogs.map((log) => (
-                <div key={log.id} className="flex items-start space-x-3 p-3 border rounded-lg">
-                  <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <p className="font-medium text-sm">{log.action}</p>
-                      <Badge variant={getLogLevelColor(log.level) as any} className="text-xs">
-                        {log.level}
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{log.user}</p>
-                    <p className="text-xs text-muted-foreground flex items-center mt-1">
-                      <Clock className="h-3 w-3 mr-1" />
-                      {log.timestamp}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
     </div>
   );
 }

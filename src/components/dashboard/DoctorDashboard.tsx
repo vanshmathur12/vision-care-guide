@@ -2,17 +2,13 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   Users,
   Calendar,
   Activity,
   Search,
-  Plus,
-  Clock,
-  AlertCircle,
-  CheckCircle
+  Plus
 } from 'lucide-react';
 
 const mockPatients = [
@@ -37,24 +33,6 @@ export function DoctorDashboard() {
     patient.id.toString().includes(searchTerm)
   );
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'critical': return 'destructive';
-      case 'needs-attention': return 'warning';
-      case 'stable': return 'default';
-      default: return 'default';
-    }
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'critical': return <AlertCircle className="h-4 w-4" />;
-      case 'needs-attention': return <Clock className="h-4 w-4" />;
-      case 'stable': return <CheckCircle className="h-4 w-4" />;
-      default: return <Activity className="h-4 w-4" />;
-    }
-  };
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -64,7 +42,7 @@ export function DoctorDashboard() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Patients</CardTitle>
@@ -84,19 +62,6 @@ export function DoctorDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">{upcomingAppointments.length}</div>
             <p className="text-xs text-muted-foreground">Scheduled for today</p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Critical Patients</CardTitle>
-            <AlertCircle className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {mockPatients.filter(p => p.status === 'critical').length}
-            </div>
-            <p className="text-xs text-muted-foreground">Require immediate attention</p>
           </CardContent>
         </Card>
       </div>
@@ -146,12 +111,6 @@ export function DoctorDashboard() {
                           Age {patient.age} • {patient.diagnosis}
                         </p>
                       </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Badge variant={getStatusColor(patient.status) as any} className="flex items-center space-x-1">
-                        {getStatusIcon(patient.status)}
-                        <span className="capitalize">{patient.status.replace('-', ' ')}</span>
-                      </Badge>
                     </div>
                   </div>
                 ))}
