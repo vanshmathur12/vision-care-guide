@@ -34,11 +34,11 @@ const navigationConfig = {
     path: '/dashboard',
     icon: Activity
   }, {
-    name: 'Book Appointment',
-    path: '/book',
-    icon: Calendar
+    name: 'My Records',
+    path: '/my-records',
+    icon: FileText
   }, {
-    name: 'My Appointments',
+    name: 'Appointments',
     path: '/appointments',
     icon: Calendar
   }, {
@@ -46,9 +46,9 @@ const navigationConfig = {
     path: '/documents',
     icon: Upload
   }, {
-    name: 'My Records',
-    path: '/my-records',
-    icon: FileText
+    name: 'Risk Assessment',
+    path: '/risk-assessment',
+    icon: UserCheck
   }],
   admin: [{
     name: 'Dashboard',

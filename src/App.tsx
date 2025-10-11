@@ -7,10 +7,9 @@ import { AuthProvider } from "@/components/auth/AuthProvider";
 import { AppLayout } from "@/components/layout/AppLayout";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import Auth from './pages/Auth';
-import FindAndBook from './pages/FindAndBook';
-import MyAppointments from './pages/MyAppointments';
-import MyDocuments from './pages/MyDocuments';
+import BookAppointment from "./pages/BookAppointment";
+import UploadDocuments from "./pages/UploadDocuments";
+import ViewRecords from "./pages/ViewRecords";
 
 const queryClient = new QueryClient();
 
@@ -25,11 +24,12 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/dashboard" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/book" element={<FindAndBook />} />
-              <Route path="/appointments" element={<MyAppointments />} />
-              <Route path="/documents" element={<MyDocuments />} />
+              <Route path="/book-appointment" element={<BookAppointment />} />
+              <Route path="/upload-documents" element={<UploadDocuments />} />
+              <Route path="/view-records" element={<ViewRecords />} />
+              <Route path="/appointments" element={<Index />} />
               <Route path="/my-records" element={<Index />} />
+              <Route path="/documents" element={<Index />} />
               <Route path="/risk-assessment" element={<Index />} />
               <Route path="/patient-search" element={<Index />} />
               <Route path="/analytics" element={<Index />} />
